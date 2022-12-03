@@ -1,0 +1,1089 @@
+#BEGIN Configuration used. Extracted from "esesc.conf":
+technology='ThisSOCTech'
+reportFile='bzip2_baseline' # Environment Variable
+pwrmodel  ='McPatPwrCounters'
+cpusimu[0]='tradCORE'
+cpuemul[0]='QEMUSectionCPU'
+[tradCORE]
+type      ='ooo'
+throttlingRatio=1.000000e+00
+StoreSetSize=8192
+stForwardDelay=4
+scbSize   =8
+robSize   =80
+retireWidth=2
+retireDelay=3
+renameDelay=2
+prefetcher='PrefetchEngine'
+nTotalRegs=40
+MemoryReplay=false
+maxStores =24
+maxLoads  =24
+maxIRequests=3
+maxBranches=32
+issueWidth=2
+interClusterLat=0
+instQueueSize=24
+IL1       ="IL1_core IL1"
+fetchWidth=2
+enableICache=true
+enableDCache=true
+drainOnMiss=true
+DL1       ="DL1_core DL1"
+decodeDelay=2
+clusterScheduler='RoundRobin'
+cluster[0]='AUNIT'
+cluster[1]='MUNIT'
+cluster[2]='CUNIT'
+bpredDelay=3
+bpred2    ='BPredIssueX2'
+bpred     ='BPredIssueX'
+bb4Cycle  =1
+alignedFetch=true
+[ThisSOCTech]
+frequency =1.700000e+09
+[TASS]
+type      ='inst'
+ROIOnly   =false
+PowPredictionHist=5
+nInstWarmup=0
+nInstTiming=3.000000e+06
+nInstSkip =3.000000e+09
+nInstRabbit=3.000000e+07
+nInstMax  =4.000000e+09
+nInstDetail=1.000000e+05
+maxnsTime =1.000000e+12
+doPowPrediction=1
+[QEMUSectionCPU]
+type      ='qemu'
+syscall   ='NoSyscall'
+sampler   ='TASS'
+params[0] ="./bins/spec00_bzip2.riscv64 ./data/spec00/256.bzip2/input.source"
+dorun     =true
+[PrivL2]
+size      =2097152
+sendFillPortOccp=2
+sendFillNumPorts=1
+replPolicy='LRU'
+numBanks  =1
+missDelay =15
+maxRequests=32
+lowerLevel="BigMem Memory"
+inclusive =true
+hitDelay  =15
+directory =true
+deviceType='cache'
+bsize     =32
+bkPortOccp=1
+bkNumPorts=1
+assoc     =16
+[PrefetchEngine]
+type      ='void'
+pfStride  =1
+minDistance=0
+maxPrefetch=0
+[NoSyscall]
+runtime   =false
+generate  =false
+enable    =false
+[MUNIT_SALU]
+Occ       =1
+Num       =1
+[MUNIT_MALU]
+Occ       =1
+Num       =1
+[MUNIT_CALU]
+Occ       =1
+Num       =1
+[MUNIT_BALU]
+Occ       =1
+Num       =1
+[MUNIT_AALU]
+Occ       =1
+Num       =1
+[MUNIT]
+winSize   =20
+schedPortOccp=1
+schedNumPorts=2
+schedDelay=0
+recycleAt ='execute'
+nRegs     =1024
+iSALU_STUnit='MUNIT_MALU'
+iSALU_STLat=0
+iSALU_SCUnit='MUNIT_MALU'
+iSALU_SCLat=0
+iSALU_LLUnit='MUNIT_MALU'
+iSALU_LLLat=0
+iSALU_ADDRUnit='MUNIT_SALU'
+iSALU_ADDRLat=0
+iLALU_LDUnit='MUNIT_MALU'
+iLALU_LDLat=0
+iCALU_MULTUnit='MUNIT_CALU'
+iCALU_MULTLat=5
+iCALU_DIVUnit='MUNIT_CALU'
+iCALU_DIVLat=8
+iBALU_RJUMPUnit='MUNIT_BALU'
+iBALU_RJUMPLat=4
+iBALU_RETUnit='MUNIT_BALU'
+iBALU_RETLat=4
+iBALU_RCALLUnit='MUNIT_BALU'
+iBALU_RCALLLat=4
+iBALU_RBRANCHUnit='MUNIT_BALU'
+iBALU_RBRANCHLat=4
+iBALU_LJUMPUnit='MUNIT_BALU'
+iBALU_LJUMPLat=4
+iBALU_LCALLUnit='MUNIT_BALU'
+iBALU_LCALLLat=4
+iBALU_LBRANCHUnit='MUNIT_BALU'
+iBALU_LBRANCHLat=4
+iAALUUnit ='MUNIT_AALU'
+iAALULat  =1
+[McPatPwrCounters]
+doPower   =false
+[IL1_core]
+size      =32768
+replPolicy='LRU'
+numBanks  =1
+missDelay =1
+maxRequests=32
+lowerLevel="PrivL2 L2 sharedby 1"
+inclusive =true
+hitDelay  =2
+directory =false
+deviceType='icache'
+bsize     =32
+bkPortOccp=1
+bkNumPorts=1
+assoc     =4
+[DL1_core]
+skew      =false
+size      =65536
+sendFillPortOccp=0
+sendFillNumPorts=1
+replPolicy='LRU'
+numBanks  =1
+missDelay =5
+maxRequests=8
+lowerLevel="PrivL2 L2 sharedby 2"
+inclusive =true
+hitDelay  =5
+directory =false
+deviceType='cache'
+bsize     =32
+bkPortOccp=1
+bkNumPorts=1
+bankShift =4
+assoc     =4
+[CUNIT_CALU]
+Occ       =1
+Num       =2
+[CUNIT]
+winSize   =32
+schedPortOccp=1
+schedNumPorts=1
+schedDelay=0
+recycleAt ='retire'
+nRegs     =32
+iCALU_FPMULTUnit='CUNIT_CALU'
+iCALU_FPMULTLat=7
+iCALU_FPDIVUnit='CUNIT_CALU'
+iCALU_FPDIVLat=28
+iCALU_FPALUUnit='CUNIT_CALU'
+iCALU_FPALULat=4
+[BPredIssueX2]
+useDolc   =true
+type      ='2level'
+l2size    =2048
+l2Bits    =2
+l1size    =1
+historySize=15
+btbSize   =64
+btbReplPolicy='LRU'
+btbicache =true
+btbHistorySize=9
+btbBsize  =1
+btbAssoc  =4
+addrShift =1
+[BPredIssueX]
+type      ='2bit'
+size      =2048
+rasSize   =8
+rasPrefetch=0
+btbSize   =16
+btbReplPolicy='RANDOM'
+btbHistorySize=0
+btbBsize  =1
+btbAssoc  =16
+BTACDelay =4
+Bits      =2
+addrShift =1
+[BigMem]
+hitDelay  =60
+deviceType='niceCache'
+coldWarmup=false
+bsize     =64
+[AUNIT_AALU]
+Occ       =1
+Num       =1
+[AUNIT]
+winSize   =20
+schedPortOccp=1
+schedNumPorts=1
+schedDelay=0
+recycleAt ='execute'
+nRegs     =1024
+iRALUUnit ='AUNIT_AALU'
+iRALULat  =1
+iAALUUnit ='AUNIT_AALU'
+iAALULat  =1
+#END Configuration used. Extracted from "esesc.conf":
+OSSim:reportName=done
+OSSim:beginTime=Mon Oct 17 16:42:34 2022
+
+OSSim:endTime=Mon Oct 17 16:45:39 2022
+
+OSSim:nCPUs=1
+OSSim:P(0)_Sampler=0
+OSSim:P(0)_Type=0
+OSSim:nSampler=1
+OSSim:globalClock=111379375
+OSSim:msecs=  184.43
+#BEGIN GStats::report done
+DL1(0):displacedRecv=0.000000
+DL1(0):displacedSend=782151.000000
+DL1(0):invAll=0.000000
+DL1(0):invNone=11.000000
+DL1(0):invOne=0.000000
+DL1(0):lineFill=783469.000000
+DL1(0):MMUAck=0.000000
+DL1(0):MMUHalfMiss=0.000000
+DL1(0):MMUHit=0.000000
+DL1(0):MMUMiss=0.000000
+DL1(0):MMUMissState=0.000000
+DL1(0):MMUSetState=0.000000
+DL1(0):nPrefetchDropped=0.000000
+DL1(0):nPrefetchHitBusy=0.000000
+DL1(0):nPrefetchHitLine=0.000000
+DL1(0):nPrefetchHitPending=0.000000
+DL1(0):nPrefetchLineFill=0.000000
+DL1(0):nPrefetchRedundant=0.000000
+DL1(0):nPrefetchUseful=0.000000
+DL1(0):nPrefetchWasteful=0.000000
+DL1(0):nSendPrefetch=0.000000
+DL1(0):nTryPrefetch=0.000000
+DL1(0):readHalfMiss=374643.000000
+DL1(0):readHit=20133744.000000
+DL1(0):readMiss=604366.000000
+DL1(0):readMissState=0.000000
+DL1(0):setDirtyAck=0.000000
+DL1(0):setDirtySetState=0.000000
+DL1(0):setExclusiveAck=783469.000000
+DL1(0):setExclusiveHalfMiss=0.000000
+DL1(0):setExclusiveHit=0.000000
+DL1(0):setExclusiveMiss=0.000000
+DL1(0):setExclusiveMissState=0.000000
+DL1(0):setExclusiveSetState=0.000000
+DL1(0):setInvalidAck=0.000000
+DL1(0):setInvalidHalfMiss=0.000000
+DL1(0):setInvalidHit=0.000000
+DL1(0):setInvalidMiss=0.000000
+DL1(0):setInvalidMissState=0.000000
+DL1(0):setInvalidSetState=11.000000
+DL1(0):setSharedAck=0.000000
+DL1(0):setSharedHalfMiss=0.000000
+DL1(0):setSharedHit=0.000000
+DL1(0):setSharedMiss=0.000000
+DL1(0):setSharedMissState=0.000000
+DL1(0):setSharedSetState=0.000000
+DL1(0):setValidAck=0.000000
+DL1(0):setValidSetState=0.000000
+DL1(0):VPCMUAck=0.000000
+DL1(0):VPCMUHalfMiss=0.000000
+DL1(0):VPCMUHit=0.000000
+DL1(0):VPCMUMiss=0.000000
+DL1(0):VPCMUMissState=0.000000
+DL1(0):VPCMUSetState=0.000000
+DL1(0):writeBack=341036.000000
+DL1(0):writeExclusive=0.000000
+DL1(0):writeHalfMiss=354122.000000
+DL1(0):writeHit=7117830.000000
+DL1(0):writeMiss=179103.000000
+DL1(0):writeMissState=0.000000
+DL1(0)_avgHalfMemLat:n=728765::v=48.531690
+DL1(0)_avgMemLat:n=28763808::v=9.243461
+DL1(0)_avgMissLat:n=783469::v=69.680563
+DL1(0)_avgPrefetchLat:n=0::v=-nan
+DL1(0)_avgSnoopLat:n=0::v=-nan
+DL1(0)_bk(0)_occ:n=31897686::v=0.568942
+DL1(0)_capInvalidateHit=0.000000
+DL1(0)_capInvalidateMiss=0.000000
+DL1(0)_invalidateHit=0.000000
+DL1(0)_invalidateMiss=0.000000
+DL1(0)_MSHR:nStallConflict=768863.000000
+DL1(0)_MSHR_avgSubUse:n=28763808::v=1.077835
+DL1(0)_MSHR_avgUse:n=28763808::v=1.281140
+DL1(0)_sendFill_occ:n=28763808::v=0.000000
+DL1(0)_tracker0=0.000000
+DL1(0)_tracker1=0.000000
+DL1(0)_tracker10=0.000000
+DL1(0)_tracker11=0.000000
+DL1(0)_tracker12=0.000000
+DL1(0)_tracker13=0.000000
+DL1(0)_tracker14=0.000000
+DL1(0)_tracker15=0.000000
+DL1(0)_tracker2=0.000000
+DL1(0)_tracker3=0.000000
+DL1(0)_tracker4=0.000000
+DL1(0)_tracker5=0.000000
+DL1(0)_tracker6=0.000000
+DL1(0)_tracker7=0.000000
+DL1(0)_tracker8=0.000000
+DL1(0)_tracker9=0.000000
+DL1(0)_trackerDown1=0.000000
+DL1(0)_trackerDown1n=0.000000
+DL1(0)_trackerDown2=0.000000
+DL1(0)_trackerDown2n=0.000000
+DL1(0)_trackerDown3=0.000000
+DL1(0)_trackerDown3n=0.000000
+DL1(0)_trackerDown4=0.000000
+DL1(0)_trackerDown4n=0.000000
+DL1(0)_trackerMore=0.000000
+DL1(0)_trackerOne=0.000000
+DL1(0)_trackerTwo=0.000000
+DL1(0)_trackerUp1=0.000000
+DL1(0)_trackerUp1n=0.000000
+DL1(0)_trackerZero=0.000000
+DL1(0)p_MSHR:nStallConflict=0.000000
+DL1(0)p_MSHR_avgSubUse:n=0::v=-nan
+DL1(0)p_MSHR_avgUse:n=0::v=-nan
+IL1(0):displacedRecv=0.000000
+IL1(0):displacedSend=0.000000
+IL1(0):invAll=0.000000
+IL1(0):invNone=1056.000000
+IL1(0):invOne=0.000000
+IL1(0):lineFill=808.000000
+IL1(0):MMUAck=0.000000
+IL1(0):MMUHalfMiss=0.000000
+IL1(0):MMUHit=0.000000
+IL1(0):MMUMiss=0.000000
+IL1(0):MMUMissState=0.000000
+IL1(0):MMUSetState=0.000000
+IL1(0):nPrefetchDropped=0.000000
+IL1(0):nPrefetchHitBusy=0.000000
+IL1(0):nPrefetchHitLine=0.000000
+IL1(0):nPrefetchHitPending=0.000000
+IL1(0):nPrefetchLineFill=0.000000
+IL1(0):nPrefetchRedundant=0.000000
+IL1(0):nPrefetchUseful=0.000000
+IL1(0):nPrefetchWasteful=0.000000
+IL1(0):nSendPrefetch=0.000000
+IL1(0):nTryPrefetch=0.000000
+IL1(0):readHalfMiss=1288.000000
+IL1(0):readHit=60849340.000000
+IL1(0):readMiss=808.000000
+IL1(0):readMissState=0.000000
+IL1(0):setDirtyAck=0.000000
+IL1(0):setDirtySetState=0.000000
+IL1(0):setExclusiveAck=808.000000
+IL1(0):setExclusiveHalfMiss=0.000000
+IL1(0):setExclusiveHit=0.000000
+IL1(0):setExclusiveMiss=0.000000
+IL1(0):setExclusiveMissState=0.000000
+IL1(0):setExclusiveSetState=0.000000
+IL1(0):setInvalidAck=0.000000
+IL1(0):setInvalidHalfMiss=0.000000
+IL1(0):setInvalidHit=0.000000
+IL1(0):setInvalidMiss=0.000000
+IL1(0):setInvalidMissState=0.000000
+IL1(0):setInvalidSetState=1056.000000
+IL1(0):setSharedAck=0.000000
+IL1(0):setSharedHalfMiss=0.000000
+IL1(0):setSharedHit=0.000000
+IL1(0):setSharedMiss=0.000000
+IL1(0):setSharedMissState=0.000000
+IL1(0):setSharedSetState=0.000000
+IL1(0):setValidAck=0.000000
+IL1(0):setValidSetState=0.000000
+IL1(0):VPCMUAck=0.000000
+IL1(0):VPCMUHalfMiss=0.000000
+IL1(0):VPCMUHit=0.000000
+IL1(0):VPCMUMiss=0.000000
+IL1(0):VPCMUMissState=0.000000
+IL1(0):VPCMUSetState=0.000000
+IL1(0):writeBack=0.000000
+IL1(0):writeExclusive=0.000000
+IL1(0):writeHalfMiss=0.000000
+IL1(0):writeHit=0.000000
+IL1(0):writeMiss=0.000000
+IL1(0):writeMissState=0.000000
+IL1(0)_avgHalfMemLat:n=1288::v=74.996894
+IL1(0)_avgMemLat:n=60851436::v=2.002589
+IL1(0)_avgMissLat:n=808::v=78.106436
+IL1(0)_avgPrefetchLat:n=0::v=-nan
+IL1(0)_avgSnoopLat:n=0::v=-nan
+IL1(0)_bk(0)_occ:n=60853052::v=0.000002
+IL1(0)_capInvalidateHit=0.000000
+IL1(0)_capInvalidateMiss=0.000000
+IL1(0)_invalidateHit=0.000000
+IL1(0)_invalidateMiss=0.000000
+IL1(0)_MSHR:nStallConflict=1939.000000
+IL1(0)_MSHR_avgSubUse:n=60851436::v=1.000031
+IL1(0)_MSHR_avgUse:n=60851436::v=1.000044
+IL1(0)_sendFill_occ:n=60851436::v=0.000064
+IL1(0)_tracker0=0.000000
+IL1(0)_tracker1=0.000000
+IL1(0)_tracker10=0.000000
+IL1(0)_tracker11=0.000000
+IL1(0)_tracker12=0.000000
+IL1(0)_tracker13=0.000000
+IL1(0)_tracker14=0.000000
+IL1(0)_tracker15=0.000000
+IL1(0)_tracker2=0.000000
+IL1(0)_tracker3=0.000000
+IL1(0)_tracker4=0.000000
+IL1(0)_tracker5=0.000000
+IL1(0)_tracker6=0.000000
+IL1(0)_tracker7=0.000000
+IL1(0)_tracker8=0.000000
+IL1(0)_tracker9=0.000000
+IL1(0)_trackerDown1=0.000000
+IL1(0)_trackerDown1n=0.000000
+IL1(0)_trackerDown2=0.000000
+IL1(0)_trackerDown2n=0.000000
+IL1(0)_trackerDown3=0.000000
+IL1(0)_trackerDown3n=0.000000
+IL1(0)_trackerDown4=0.000000
+IL1(0)_trackerDown4n=0.000000
+IL1(0)_trackerMore=0.000000
+IL1(0)_trackerOne=0.000000
+IL1(0)_trackerTwo=0.000000
+IL1(0)_trackerUp1=0.000000
+IL1(0)_trackerUp1n=0.000000
+IL1(0)_trackerZero=0.000000
+IL1(0)p_MSHR:nStallConflict=0.000000
+IL1(0)p_MSHR_avgSubUse:n=0::v=-nan
+IL1(0)p_MSHR_avgUse:n=0::v=-nan
+L2(0):displacedRecv=782151.000000
+L2(0):displacedSend=49881.000000
+L2(0):invAll=0.000000
+L2(0):invNone=48814.000000
+L2(0):invOne=1067.000000
+L2(0):lineFill=510284.000000
+L2(0):MMUAck=0.000000
+L2(0):MMUHalfMiss=0.000000
+L2(0):MMUHit=0.000000
+L2(0):MMUMiss=0.000000
+L2(0):MMUMissState=0.000000
+L2(0):MMUSetState=0.000000
+L2(0):nPrefetchDropped=0.000000
+L2(0):nPrefetchHitBusy=0.000000
+L2(0):nPrefetchHitLine=0.000000
+L2(0):nPrefetchHitPending=0.000000
+L2(0):nPrefetchLineFill=0.000000
+L2(0):nPrefetchRedundant=0.000000
+L2(0):nPrefetchUseful=0.000000
+L2(0):nPrefetchWasteful=0.000000
+L2(0):nSendPrefetch=0.000000
+L2(0):nTryPrefetch=0.000000
+L2(0):readHalfMiss=0.000000
+L2(0):readHit=183272.000000
+L2(0):readMiss=421902.000000
+L2(0):readMissState=0.000000
+L2(0):setDirtyAck=0.000000
+L2(0):setDirtySetState=0.000000
+L2(0):setExclusiveAck=510284.000000
+L2(0):setExclusiveHalfMiss=0.000000
+L2(0):setExclusiveHit=90721.000000
+L2(0):setExclusiveMiss=88382.000000
+L2(0):setExclusiveMissState=0.000000
+L2(0):setExclusiveSetState=0.000000
+L2(0):setInvalidAck=0.000000
+L2(0):setInvalidHalfMiss=0.000000
+L2(0):setInvalidHit=0.000000
+L2(0):setInvalidMiss=0.000000
+L2(0):setInvalidMissState=0.000000
+L2(0):setInvalidSetState=0.000000
+L2(0):setSharedAck=0.000000
+L2(0):setSharedHalfMiss=0.000000
+L2(0):setSharedHit=0.000000
+L2(0):setSharedMiss=0.000000
+L2(0):setSharedMissState=0.000000
+L2(0):setSharedSetState=0.000000
+L2(0):setValidAck=0.000000
+L2(0):setValidSetState=0.000000
+L2(0):VPCMUAck=0.000000
+L2(0):VPCMUHalfMiss=0.000000
+L2(0):VPCMUHit=0.000000
+L2(0):VPCMUMiss=0.000000
+L2(0):VPCMUMissState=0.000000
+L2(0):VPCMUSetState=0.000000
+L2(0):writeBack=48820.000000
+L2(0):writeExclusive=0.000000
+L2(0):writeHalfMiss=0.000000
+L2(0):writeHit=0.000000
+L2(0):writeMiss=0.000000
+L2(0):writeMissState=0.000000
+L2(0)_avgHalfMemLat:n=0::v=-nan
+L2(0)_avgMemLat:n=784277::v=65.427622
+L2(0)_avgMissLat:n=510284::v=86.068393
+L2(0)_avgPrefetchLat:n=0::v=-nan
+L2(0)_avgSnoopLat:n=2134::v=2.011246
+L2(0)_bk(0)_occ:n=2076712::v=0.046088
+L2(0)_capInvalidateHit=0.000000
+L2(0)_capInvalidateMiss=0.000000
+L2(0)_invalidateHit=0.000000
+L2(0)_invalidateMiss=0.000000
+L2(0)_MSHR:nStallConflict=0.000000
+L2(0)_MSHR_avgSubUse:n=784277::v=1.000000
+L2(0)_MSHR_avgUse:n=784277::v=2.077279
+L2(0)_sendFill_occ:n=784277::v=0.085843
+L2(0)_tracker0=0.000000
+L2(0)_tracker1=0.000000
+L2(0)_tracker10=0.000000
+L2(0)_tracker11=0.000000
+L2(0)_tracker12=0.000000
+L2(0)_tracker13=0.000000
+L2(0)_tracker14=0.000000
+L2(0)_tracker15=0.000000
+L2(0)_tracker2=0.000000
+L2(0)_tracker3=0.000000
+L2(0)_tracker4=0.000000
+L2(0)_tracker5=0.000000
+L2(0)_tracker6=0.000000
+L2(0)_tracker7=0.000000
+L2(0)_tracker8=0.000000
+L2(0)_tracker9=0.000000
+L2(0)_trackerDown1=0.000000
+L2(0)_trackerDown1n=0.000000
+L2(0)_trackerDown2=0.000000
+L2(0)_trackerDown2n=0.000000
+L2(0)_trackerDown3=0.000000
+L2(0)_trackerDown3n=0.000000
+L2(0)_trackerDown4=0.000000
+L2(0)_trackerDown4n=0.000000
+L2(0)_trackerMore=0.000000
+L2(0)_trackerOne=0.000000
+L2(0)_trackerTwo=0.000000
+L2(0)_trackerUp1=0.000000
+L2(0)_trackerUp1n=0.000000
+L2(0)_trackerZero=0.000000
+L2(0)p_MSHR:nStallConflict=0.000000
+L2(0)p_MSHR_avgSubUse:n=0::v=-nan
+L2(0)p_MSHR_avgUse:n=0::v=-nan
+Memory(0):pushDownHit=0.000000
+Memory(0):readHalfMiss=0.000000
+Memory(0):readHit=1020568.000000
+Memory(0):readMiss=0.000000
+Memory(0):writeBack=0.000000
+Memory(0):writeExclusive=0.000000
+Memory(0):writeHalfMiss=0.000000
+Memory(0):writeHit=49881.000000
+Memory(0):writeMiss=0.000000
+Memory(0)_avgMemLat:n=510284::v=60.000000
+OS:wallClock=107393668.000000
+P(0):clockTicks=107393668.000000
+P(0):nCommitted=92993311.000000
+P(0):nFreeze=0.000000
+P(0):noFetch=0.000000
+P(0):noFetch2=46542285.000000
+P(0):stldForwarding=970607.000000
+P(0)_AUNIT0_1_avgExecuteTime:n=26979009::v=1.196983
+P(0)_AUNIT0_1_avgIssueTime:n=26979009::v=4.045832
+P(0)_AUNIT0_1_avgRenameTime:n=26979009::v=3556.506121
+P(0)_AUNIT0_1_avgRetireTime:n=26979009::v=14.940031
+P(0)_AUNIT0_AUNIT_AALU_occ:n=26979015::v=0.000000
+P(0)_AUNIT0_dmemoryBarrier=0.000000
+P(0)_AUNIT0_imemoryBarrier=0.000000
+P(0)_AUNIT0_rdRegPool=53958030.000000
+P(0)_AUNIT0_sched_occ:n=26979015::v=0.196983
+P(0)_AUNIT0_winNotUsed:n=26979009::v=18.608451
+P(0)_AUNIT0_wrForwardBus=8745592.000000
+P(0)_AUNIT0_wrRegPool=26979015.000000
+P(0)_avgFetchWidth:n=60851436::v=1.528203
+P(0)_avgPNRHitLoadSpec:n=99526947::v=1.806661
+P(0)_avgPNRMissLoadSpec(1)=67617.000000
+P(0)_avgPNRMissLoadSpec(0)=99459330.000000
+P(0)_avgPNRMissLoadSpec:max=1
+P(0)_avgPNRMissLoadSpec:v=0.000679
+P(0)_avgPNRMissLoadSpec:n=99526947.000000
+P(0)_BPred2_2level:nHit=11114752.000000
+P(0)_BPred2_2level:nMiss=958998.000000
+P(0)_BPred2_BTB:_tracker0=0.000000
+P(0)_BPred2_BTB:_tracker1=0.000000
+P(0)_BPred2_BTB:_tracker10=0.000000
+P(0)_BPred2_BTB:_tracker11=0.000000
+P(0)_BPred2_BTB:_tracker12=0.000000
+P(0)_BPred2_BTB:_tracker13=0.000000
+P(0)_BPred2_BTB:_tracker14=0.000000
+P(0)_BPred2_BTB:_tracker15=0.000000
+P(0)_BPred2_BTB:_tracker2=0.000000
+P(0)_BPred2_BTB:_tracker3=0.000000
+P(0)_BPred2_BTB:_tracker4=0.000000
+P(0)_BPred2_BTB:_tracker5=0.000000
+P(0)_BPred2_BTB:_tracker6=0.000000
+P(0)_BPred2_BTB:_tracker7=0.000000
+P(0)_BPred2_BTB:_tracker8=0.000000
+P(0)_BPred2_BTB:_tracker9=0.000000
+P(0)_BPred2_BTB:_trackerDown1=0.000000
+P(0)_BPred2_BTB:_trackerDown1n=0.000000
+P(0)_BPred2_BTB:_trackerDown2=0.000000
+P(0)_BPred2_BTB:_trackerDown2n=0.000000
+P(0)_BPred2_BTB:_trackerDown3=0.000000
+P(0)_BPred2_BTB:_trackerDown3n=0.000000
+P(0)_BPred2_BTB:_trackerDown4=0.000000
+P(0)_BPred2_BTB:_trackerDown4n=0.000000
+P(0)_BPred2_BTB:_trackerMore=0.000000
+P(0)_BPred2_BTB:_trackerOne=0.000000
+P(0)_BPred2_BTB:_trackerTwo=0.000000
+P(0)_BPred2_BTB:_trackerUp1=0.000000
+P(0)_BPred2_BTB:_trackerUp1n=0.000000
+P(0)_BPred2_BTB:_trackerZero=0.000000
+P(0)_BPred2_BTB:nHit=0.000000
+P(0)_BPred2_BTB:nHitLabel=7008235.000000
+P(0)_BPred2_BTB:nMiss=0.000000
+P(0)_BPred:nAgree3=0.000000
+P(0)_BPred:nBranches=13783179.000000
+P(0)_BPred:nBranches2=13783179.000000
+P(0)_BPred:nBranches3=0.000000
+P(0)_BPred:nBTAC=1709429.000000
+P(0)_BPred:nFixes1=11765552.000000
+P(0)_BPred:nFixes2=143674.000000
+P(0)_BPred:nFixes3=0.000000
+P(0)_BPred:nHit3_miss2=0.000000
+P(0)_BPred:nMiss=958998.000000
+P(0)_BPred:nMiss2=958998.000000
+P(0)_BPred:nMiss3=0.000000
+P(0)_BPred:nNoPredict=0.000000
+P(0)_BPred:nNoPredict3=0.000000
+P(0)_BPred:nNoPredict_miss3=993736.000000
+P(0)_BPred:nTaken=7439331.000000
+P(0)_BPred:nTaken2=7439331.000000
+P(0)_BPred:nTaken3=0.000000
+P(0)_BPred:nUnFixes=959010.000000
+P(0)_BPred_2bit:nHit=10971078.000000
+P(0)_BPred_2bit:nMiss=958998.000000
+P(0)_BPred_BTB:_tracker0=0.000000
+P(0)_BPred_BTB:_tracker1=0.000000
+P(0)_BPred_BTB:_tracker10=0.000000
+P(0)_BPred_BTB:_tracker11=0.000000
+P(0)_BPred_BTB:_tracker12=0.000000
+P(0)_BPred_BTB:_tracker13=0.000000
+P(0)_BPred_BTB:_tracker14=0.000000
+P(0)_BPred_BTB:_tracker15=0.000000
+P(0)_BPred_BTB:_tracker2=0.000000
+P(0)_BPred_BTB:_tracker3=0.000000
+P(0)_BPred_BTB:_tracker4=0.000000
+P(0)_BPred_BTB:_tracker5=0.000000
+P(0)_BPred_BTB:_tracker6=0.000000
+P(0)_BPred_BTB:_tracker7=0.000000
+P(0)_BPred_BTB:_tracker8=0.000000
+P(0)_BPred_BTB:_tracker9=0.000000
+P(0)_BPred_BTB:_trackerDown1=0.000000
+P(0)_BPred_BTB:_trackerDown1n=0.000000
+P(0)_BPred_BTB:_trackerDown2=0.000000
+P(0)_BPred_BTB:_trackerDown2n=0.000000
+P(0)_BPred_BTB:_trackerDown3=0.000000
+P(0)_BPred_BTB:_trackerDown3n=0.000000
+P(0)_BPred_BTB:_trackerDown4=0.000000
+P(0)_BPred_BTB:_trackerDown4n=0.000000
+P(0)_BPred_BTB:_trackerMore=0.000000
+P(0)_BPred_BTB:_trackerOne=0.000000
+P(0)_BPred_BTB:_trackerTwo=0.000000
+P(0)_BPred_BTB:_trackerUp1=0.000000
+P(0)_BPred_BTB:_trackerUp1n=0.000000
+P(0)_BPred_BTB:_trackerZero=0.000000
+P(0)_BPred_BTB:nHit=6721519.000000
+P(0)_BPred_BTB:nHitLabel=0.000000
+P(0)_BPred_BTB:nMiss=286716.000000
+P(0)_BPred_RAS:nHit=794474.000000
+P(0)_BPred_RAS:nMiss=12.000000
+P(0)_CUNIT2_15_avgExecuteTime:n=0::v=-nan
+P(0)_CUNIT2_15_avgIssueTime:n=0::v=-nan
+P(0)_CUNIT2_15_avgRenameTime:n=0::v=-nan
+P(0)_CUNIT2_15_avgRetireTime:n=0::v=-nan
+P(0)_CUNIT2_CUNIT_CALU_occ:n=0::v=-nan
+P(0)_CUNIT2_rdRegPool=0.000000
+P(0)_CUNIT2_sched_occ:n=0::v=-nan
+P(0)_CUNIT2_winNotUsed:n=0::v=-nan
+P(0)_CUNIT2_wrForwardBus=0.000000
+P(0)_CUNIT2_wrRegPool=0.000000
+P(0)_ExeEngine:nDivergeStall=0.000000
+P(0)_ExeEngine:nOutsBranchesStall=0.000000
+P(0)_ExeEngine:nOutsLoadsStall=0.000000
+P(0)_ExeEngine:nOutsStoresStall=2260472.000000
+P(0)_ExeEngine:nReplaysStall=0.000000
+P(0)_ExeEngine:nSmallREGStall=8820663.000000
+P(0)_ExeEngine:nSmallROBStall=317240.000000
+P(0)_ExeEngine:nSmallWinStall=7380923.000000
+P(0)_ExeEngine:nSyscallStall=0.000000
+P(0)_ExeEngine_iAALU:n=45345548.000000
+P(0)_ExeEngine_iBALU_LBRANCH:n=12073750.000000
+P(0)_ExeEngine_iBALU_LCALL:n=794499.000000
+P(0)_ExeEngine_iBALU_LJUMP:n=914930.000000
+P(0)_ExeEngine_iBALU_RBRANCH:n=0.000000
+P(0)_ExeEngine_iBALU_RCALL:n=0.000000
+P(0)_ExeEngine_iBALU_RET:n=794486.000000
+P(0)_ExeEngine_iBALU_RJUMP:n=0.000000
+P(0)_ExeEngine_iCALU_DIV:n=63.000000
+P(0)_ExeEngine_iCALU_FPALU:n=0.000000
+P(0)_ExeEngine_iCALU_FPDIV:n=0.000000
+P(0)_ExeEngine_iCALU_FPMULT:n=0.000000
+P(0)_ExeEngine_iCALU_MULT:n=3.000000
+P(0)_ExeEngine_iLALU_LD:n=21112755.000000
+P(0)_ExeEngine_iRALU:n=4306241.000000
+P(0)_ExeEngine_iSALU_ADDR:n=0.000000
+P(0)_ExeEngine_iSALU_LL:n=0.000000
+P(0)_ExeEngine_iSALU_SC:n=0.000000
+P(0)_ExeEngine_iSALU_ST:n=7651056.000000
+P(0)_ExeEngine_iSubInvalid:n=0.000000
+P(0)_FetchEngine:nBTAC=0.000000
+P(0)_FetchEngine:nDelayInst1=24856355.000000
+P(0)_FetchEngine:nDelayInst2=8.000000
+P(0)_FetchEngine:nDelayInst3=27380984.000000
+P(0)_FetchEngine_avgBranchTime:n=959010::v=25.918765
+P(0)_FetchEngine_avgBranchTime2:n=13618655::v=2.010550
+P(0)_FetchEngine_avgFetched:n=60851436::v=1.528203
+P(0)_FetchEngine_avgFetchLost:n=60851436::v=0.512981
+P(0)_FetchEngine_avgFetchTime:n=14577665::v=25018.944690
+P(0)_ipc:n=31::v=90.975806
+P(0)_MUNIT1_10_avgExecuteTime:n=21112750::v=9.200225
+P(0)_MUNIT1_10_avgIssueTime:n=21112750::v=2.999020
+P(0)_MUNIT1_10_avgRenameTime:n=21112750::v=7.130432
+P(0)_MUNIT1_10_avgRetireTime:n=21112750::v=9.367429
+P(0)_MUNIT1_11_avgExecuteTime:n=7651055::v=0.042700
+P(0)_MUNIT1_11_avgIssueTime:n=7651055::v=5.898467
+P(0)_MUNIT1_11_avgRenameTime:n=7651055::v=7.178066
+P(0)_MUNIT1_11_avgRetireTime:n=7651055::v=20.532773
+P(0)_MUNIT1_14_avgExecuteTime:n=0::v=-nan
+P(0)_MUNIT1_14_avgIssueTime:n=0::v=-nan
+P(0)_MUNIT1_14_avgRenameTime:n=0::v=-nan
+P(0)_MUNIT1_14_avgRetireTime:n=0::v=-nan
+P(0)_MUNIT1_18_avgExecuteTime:n=66::v=5.000000
+P(0)_MUNIT1_18_avgIssueTime:n=66::v=3.969697
+P(0)_MUNIT1_18_avgRenameTime:n=66::v=11.560606
+P(0)_MUNIT1_18_avgRetireTime:n=66::v=15.196970
+P(0)_MUNIT1_2_avgExecuteTime:n=22672769::v=1.182695
+P(0)_MUNIT1_2_avgIssueTime:n=22672769::v=4.326476
+P(0)_MUNIT1_2_avgRenameTime:n=22672769::v=4362.678097
+P(0)_MUNIT1_2_avgRetireTime:n=22672769::v=14.758090
+P(0)_MUNIT1_3_avgExecuteTime:n=14577663::v=4.121600
+P(0)_MUNIT1_3_avgIssueTime:n=14577663::v=6.061250
+P(0)_MUNIT1_3_avgRenameTime:n=14577663::v=7.295013
+P(0)_MUNIT1_3_avgRetireTime:n=14577663::v=13.987323
+P(0)_MUNIT1_iSALU_ADDR:stldViolations=0.000000
+P(0)_MUNIT1_iSALU_ST:stldViolations=71268.000000
+P(0)_MUNIT1_MUNIT_AALU_occ:n=22672773::v=0.150907
+P(0)_MUNIT1_MUNIT_BALU_occ:n=14577664::v=0.078502
+P(0)_MUNIT1_MUNIT_CALU_occ:n=66::v=0.000000
+P(0)_MUNIT1_MUNIT_MALU_occ:n=28763810::v=0.428433
+P(0)_MUNIT1_MUNIT_SALU_occ:n=0::v=-nan
+P(0)_MUNIT1_rdRegPool=132028632.000000
+P(0)_MUNIT1_sched_occ:n=66014313::v=0.075436
+P(0)_MUNIT1_specld:stldViolations=0.000000
+P(0)_MUNIT1_winNotUsed:n=66014302::v=15.026888
+P(0)_MUNIT1_wrForwardBus=8709200.000000
+P(0)_MUNIT1_wrRegPool=44580094.000000
+P(0)_nReplayInst:n=0::v=-nan
+P(0)_pref__avgPrefetchConf:n=0::v=-nan
+P(0)_pref__histPrefetchDelta:max=0
+P(0)_pref__histPrefetchDelta:v=-nan
+P(0)_pref__histPrefetchDelta:n=0.000000
+P(0)_pref_avgPrefetchNum:n=0::v=-nan
+P(0)_prof_12ab8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=2:bp1_miss=0:bp2_hit=2:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=2:on_time_tl=0:late_tl=0
+P(0)_prof_12aae:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=3:prefetch=0:ldbr=0:bp1_hit=36:bp1_miss=4:bp2_hit=37:bp2_miss=3:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=40:on_time_tl=0:late_tl=0
+P(0)_prof_12a7e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=2:bp1_miss=0:bp2_hit=2:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=2:on_time_tl=0:late_tl=0
+P(0)_prof_130a6:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=2:bp2_hit=1:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=2:on_time_tl=0:late_tl=0
+P(0)_prof_10a9c:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_10a94:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=110:bp1_miss=2:bp2_hit=111:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=112:on_time_tl=0:late_tl=0
+P(0)_prof_10a66:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=1:bp2_hit=0:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_10a62:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=254:bp1_miss=2:bp2_hit=254:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=256:on_time_tl=0:late_tl=0
+P(0)_prof_13702:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_13134:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=29758:bp1_miss=1:bp2_hit=29758:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=29759:on_time_tl=0:late_tl=0
+P(0)_prof_13138:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=29758:bp1_miss=1:bp2_hit=29759:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=29759:on_time_tl=0:late_tl=0
+P(0)_prof_13118:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_13100:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=1:bp2_hit=0:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_12fb6:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=1:bp2_hit=0:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_10b1a:n=0.035:cpi=0.000000:wt=0.000000:et=0.000000:flush=61707:prefetch=0:ldbr=0:bp1_hit=366084:bp1_miss=61707:bp2_hit=366084:bp2_miss=61707:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=427791:on_time_tl=0:late_tl=0
+P(0)_prof_12534:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=343:bp1_miss=1:bp2_hit=343:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=344:on_time_tl=0:late_tl=0
+P(0)_prof_11f22:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=37:prefetch=0:ldbr=0:bp1_hit=1806:bp1_miss=37:bp2_hit=1806:bp2_miss=37:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1843:on_time_tl=0:late_tl=0
+P(0)_prof_11f1a:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=18:bp1_miss=0:bp2_hit=18:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=18:on_time_tl=0:late_tl=0
+P(0)_prof_11edc:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=16:prefetch=0:ldbr=0:bp1_hit=2:bp1_miss=16:bp2_hit=2:bp2_miss=16:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=18:on_time_tl=0:late_tl=0
+P(0)_prof_10ecc:n=0.004:cpi=0.000000:wt=0.000000:et=0.000000:flush=13293:prefetch=0:ldbr=0:bp1_hit=37525:bp1_miss=14763:bp2_hit=38995:bp2_miss=13293:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=52288:on_time_tl=0:late_tl=0
+P(0)_prof_11cda:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=4614:bp1_miss=0:bp2_hit=4614:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4614:on_time_tl=0:late_tl=0
+P(0)_prof_11ebc:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=18:bp1_miss=0:bp2_hit=18:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=18:on_time_tl=0:late_tl=0
+P(0)_prof_11e74:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=4:prefetch=0:ldbr=0:bp1_hit=12:bp1_miss=6:bp2_hit=14:bp2_miss=4:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=18:on_time_tl=0:late_tl=0
+P(0)_prof_1287e:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=902:prefetch=0:ldbr=0:bp1_hit=5285:bp1_miss=923:bp2_hit=5306:bp2_miss=902:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6208:on_time_tl=0:late_tl=0
+P(0)_prof_10b66:n=0.015:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=175334:bp1_miss=3:bp2_hit=175335:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=175337:on_time_tl=0:late_tl=0
+P(0)_prof_10f6a:n=0.004:cpi=0.000000:wt=0.000000:et=0.000000:flush=7628:prefetch=0:ldbr=0:bp1_hit=44845:bp1_miss=7859:bp2_hit=45076:bp2_miss=7628:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=52704:on_time_tl=0:late_tl=0
+P(0)_prof_1217c:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=6:bp1_miss=0:bp2_hit=6:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6:on_time_tl=0:late_tl=0
+P(0)_prof_11f1e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=48:prefetch=0:ldbr=0:bp1_hit=1860:bp1_miss=48:bp2_hit=1860:bp2_miss=48:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1908:on_time_tl=0:late_tl=0
+P(0)_prof_11b1a:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=74:prefetch=0:ldbr=0:bp1_hit=3782:bp1_miss=79:bp2_hit=3787:bp2_miss=74:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=3861:on_time_tl=0:late_tl=0
+P(0)_prof_10b46:n=0.005:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=58389:bp1_miss=1:bp2_hit=58389:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=58390:on_time_tl=0:late_tl=0
+P(0)_prof_12964:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1278:prefetch=0:ldbr=0:bp1_hit=2714:bp1_miss=1397:bp2_hit=2833:bp2_miss=1278:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4111:on_time_tl=0:late_tl=0
+P(0)_prof_10c68:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=11125:prefetch=0:ldbr=0:bp1_hit=13777:bp1_miss=11125:bp2_hit=13777:bp2_miss=11125:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=24902:on_time_tl=0:late_tl=0
+P(0)_prof_1328e:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=6256:prefetch=0:ldbr=0:bp1_hit=12665:bp1_miss=6717:bp2_hit=13126:bp2_miss=6256:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=19382:on_time_tl=0:late_tl=0
+P(0)_prof_10c2e:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=10084:prefetch=0:ldbr=0:bp1_hit=14818:bp1_miss=10084:bp2_hit=14818:bp2_miss=10084:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=24902:on_time_tl=0:late_tl=0
+P(0)_prof_10c5c:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=7175:prefetch=0:ldbr=0:bp1_hit=8510:bp1_miss=7176:bp2_hit=8511:bp2_miss=7175:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=15686:on_time_tl=0:late_tl=0
+P(0)_prof_133dc:n=0.009:cpi=0.000000:wt=0.000000:et=0.000000:flush=360:prefetch=0:ldbr=0:bp1_hit=111089:bp1_miss=360:bp2_hit=111089:bp2_miss=360:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=111449:on_time_tl=0:late_tl=0
+P(0)_prof_133d8:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=4253:prefetch=0:ldbr=0:bp1_hit=111152:bp1_miss=4253:bp2_hit=111152:bp2_miss=4253:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115405:on_time_tl=0:late_tl=0
+P(0)_prof_11fc4:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=9:prefetch=0:ldbr=0:bp1_hit=45:bp1_miss=9:bp2_hit=45:bp2_miss=9:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=54:on_time_tl=0:late_tl=0
+P(0)_prof_123c8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=15:bp1_miss=1:bp2_hit=15:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=16:on_time_tl=0:late_tl=0
+P(0)_prof_10b6e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=2:bp2_hit=1:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=3:on_time_tl=0:late_tl=0
+P(0)_prof_152de:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=115405:bp1_miss=0:bp2_hit=115405:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115405:on_time_tl=0:late_tl=0
+P(0)_prof_12eba:n=0.009:cpi=0.000000:wt=0.000000:et=0.000000:flush=156:prefetch=0:ldbr=0:bp1_hit=112093:bp1_miss=294:bp2_hit=112231:bp2_miss=156:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=112387:on_time_tl=0:late_tl=0
+P(0)_prof_10e20:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=6827:bp1_miss=0:bp2_hit=6827:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6827:on_time_tl=0:late_tl=0
+P(0)_prof_12436:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_15242:n=0.020:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=243935:bp1_miss=0:bp2_hit=243935:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=243935:on_time_tl=0:late_tl=0
+P(0)_prof_11dda:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=42:bp1_miss=0:bp2_hit=42:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=42:on_time_tl=0:late_tl=0
+P(0)_prof_123e0:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=15:bp1_miss=1:bp2_hit=15:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=16:on_time_tl=0:late_tl=0
+P(0)_prof_15208:n=0.020:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=243936:bp1_miss=0:bp2_hit=243936:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=243936:on_time_tl=0:late_tl=0
+P(0)_prof_10fc6:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=8616:prefetch=0:ldbr=0:bp1_hit=2131:bp1_miss=12082:bp2_hit=5597:bp2_miss=8616:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=14213:on_time_tl=0:late_tl=0
+P(0)_prof_10dc4:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=4678:prefetch=0:ldbr=0:bp1_hit=118898:bp1_miss=4803:bp2_hit=119023:bp2_miss=4678:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=123701:on_time_tl=0:late_tl=0
+P(0)_prof_1299c:n=0.003:cpi=0.000000:wt=0.000000:et=0.000000:flush=3500:prefetch=0:ldbr=0:bp1_hit=31961:bp1_miss=5168:bp2_hit=33629:bp2_miss=3500:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=37129:on_time_tl=0:late_tl=0
+P(0)_prof_1345a:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=115031:bp1_miss=375:bp2_hit=115404:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115406:on_time_tl=0:late_tl=0
+P(0)_prof_12248:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=15:prefetch=0:ldbr=0:bp1_hit=615:bp1_miss=15:bp2_hit=615:bp2_miss=15:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=630:on_time_tl=0:late_tl=0
+P(0)_prof_12fac:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=251:bp1_miss=146:bp2_hit=395:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=397:on_time_tl=0:late_tl=0
+P(0)_prof_11f9c:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=10:prefetch=0:ldbr=0:bp1_hit=36:bp1_miss=18:bp2_hit=44:bp2_miss=10:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=54:on_time_tl=0:late_tl=0
+P(0)_prof_11e78:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=3:bp1_miss=0:bp2_hit=3:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=3:on_time_tl=0:late_tl=0
+P(0)_prof_12882:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=857:prefetch=0:ldbr=0:bp1_hit=4533:bp1_miss=898:bp2_hit=4574:bp2_miss=857:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=5431:on_time_tl=0:late_tl=0
+P(0)_prof_12d28:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=420:prefetch=0:ldbr=0:bp1_hit=1187:bp1_miss=420:bp2_hit=1187:bp2_miss=420:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1607:on_time_tl=0:late_tl=0
+P(0)_prof_1207a:n=0.003:cpi=0.000000:wt=0.000000:et=0.000000:flush=6311:prefetch=0:ldbr=0:bp1_hit=31535:bp1_miss=6325:bp2_hit=31549:bp2_miss=6311:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=37860:on_time_tl=0:late_tl=0
+P(0)_prof_12f56:n=0.011:cpi=0.000000:wt=0.000000:et=0.000000:flush=157:prefetch=0:ldbr=0:bp1_hit=133725:bp1_miss=160:bp2_hit=133728:bp2_miss=157:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=133885:on_time_tl=0:late_tl=0
+P(0)_prof_10afc:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_10f36:n=0.008:cpi=0.000000:wt=0.000000:et=0.000000:flush=47354:prefetch=0:ldbr=0:bp1_hit=42923:bp1_miss=50903:bp2_hit=46472:bp2_miss=47354:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=93826:on_time_tl=0:late_tl=0
+P(0)_prof_12e60:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=250:bp1_miss=145:bp2_hit=394:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=395:on_time_tl=0:late_tl=0
+P(0)_prof_12254:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=7:prefetch=0:ldbr=0:bp1_hit=623:bp1_miss=7:bp2_hit=623:bp2_miss=7:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=630:on_time_tl=0:late_tl=0
+P(0)_prof_12ef8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=6:prefetch=0:ldbr=0:bp1_hit=390:bp1_miss=6:bp2_hit=390:bp2_miss=6:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=396:on_time_tl=0:late_tl=0
+P(0)_prof_11ee8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=3:prefetch=0:ldbr=0:bp1_hit=7:bp1_miss=3:bp2_hit=7:bp2_miss=3:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=10:on_time_tl=0:late_tl=0
+P(0)_prof_12ef4:n=0.008:cpi=0.000000:wt=0.000000:et=0.000000:flush=397:prefetch=0:ldbr=0:bp1_hit=100832:bp1_miss=544:bp2_hit=100979:bp2_miss=397:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=101376:on_time_tl=0:late_tl=0
+P(0)_prof_12e52:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=395:bp1_miss=1:bp2_hit=395:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=396:on_time_tl=0:late_tl=0
+P(0)_prof_12c50:n=0.013:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=158356:bp1_miss=3:bp2_hit=158358:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=158359:on_time_tl=0:late_tl=0
+P(0)_prof_123fa:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=11:prefetch=0:ldbr=0:bp1_hit=165:bp1_miss=11:bp2_hit=165:bp2_miss=11:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=176:on_time_tl=0:late_tl=0
+P(0)_prof_12f96:n=0.008:cpi=0.000000:wt=0.000000:et=0.000000:flush=398:prefetch=0:ldbr=0:bp1_hit=101088:bp1_miss=544:bp2_hit=101234:bp2_miss=398:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=101632:on_time_tl=0:late_tl=0
+P(0)_prof_11b82:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=9777:prefetch=0:ldbr=0:bp1_hit=9679:bp1_miss=9786:bp2_hit=9688:bp2_miss=9777:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=19465:on_time_tl=0:late_tl=0
+P(0)_prof_12b92:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=4:bp1_miss=0:bp2_hit=4:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4:on_time_tl=0:late_tl=0
+P(0)_prof_10dda:n=0.009:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=107084:bp1_miss=4399:bp2_hit=111483:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=111483:on_time_tl=0:late_tl=0
+P(0)_prof_10e7c:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=14217:bp1_miss=0:bp2_hit=14217:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=14217:on_time_tl=0:late_tl=0
+P(0)_prof_12624:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=3:bp1_miss=0:bp2_hit=3:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=3:on_time_tl=0:late_tl=0
+P(0)_prof_11f3c:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=4:prefetch=0:ldbr=0:bp1_hit=12:bp1_miss=6:bp2_hit=14:bp2_miss=4:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=18:on_time_tl=0:late_tl=0
+P(0)_prof_10e54:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=8622:prefetch=0:ldbr=0:bp1_hit=3385:bp1_miss=10829:bp2_hit=5592:bp2_miss=8622:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=14214:on_time_tl=0:late_tl=0
+P(0)_prof_10e10:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=2837:prefetch=0:ldbr=0:bp1_hit=6245:bp1_miss=2947:bp2_hit=6355:bp2_miss=2837:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=9192:on_time_tl=0:late_tl=0
+P(0)_prof_11eb8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=18:bp1_miss=0:bp2_hit=18:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=18:on_time_tl=0:late_tl=0
+P(0)_prof_10dd0:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=3375:prefetch=0:ldbr=0:bp1_hit=115187:bp1_miss=3680:bp2_hit=115492:bp2_miss=3375:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=118867:on_time_tl=0:late_tl=0
+P(0)_prof_1279c:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=6307:prefetch=0:ldbr=0:bp1_hit=4557:bp1_miss=10843:bp2_hit=9093:bp2_miss=6307:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=15400:on_time_tl=0:late_tl=0
+P(0)_prof_12d02:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=7:prefetch=0:ldbr=0:bp1_hit=596:bp1_miss=7:bp2_hit=596:bp2_miss=7:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=603:on_time_tl=0:late_tl=0
+P(0)_prof_12ca2:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=3:bp1_miss=2:bp2_hit=3:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=5:on_time_tl=0:late_tl=0
+P(0)_prof_127b2:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=2376:bp1_miss=6812:bp2_hit=9188:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=9188:on_time_tl=0:late_tl=0
+P(0)_prof_13078:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=6:prefetch=0:ldbr=0:bp1_hit=389:bp1_miss=6:bp2_hit=389:bp2_miss=6:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=395:on_time_tl=0:late_tl=0
+P(0)_prof_10fba:n=0.004:cpi=0.000000:wt=0.000000:et=0.000000:flush=4748:prefetch=0:ldbr=0:bp1_hit=30666:bp1_miss=14939:bp2_hit=40857:bp2_miss=4748:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=45605:on_time_tl=0:late_tl=0
+P(0)_prof_12dd8:n=0.004:cpi=0.000000:wt=0.000000:et=0.000000:flush=899:prefetch=0:ldbr=0:bp1_hit=47451:bp1_miss=1189:bp2_hit=47741:bp2_miss=899:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=48640:on_time_tl=0:late_tl=0
+P(0)_prof_10bb6:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=2:bp2_hit=1:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=3:on_time_tl=0:late_tl=0
+P(0)_prof_1323e:n=0.011:cpi=0.000000:wt=0.000000:et=0.000000:flush=12742:prefetch=0:ldbr=0:bp1_hit=115786:bp1_miss=12744:bp2_hit=115788:bp2_miss=12742:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=128530:on_time_tl=0:late_tl=0
+P(0)_prof_10d88:n=0.014:cpi=0.000000:wt=0.000000:et=0.000000:flush=10836:prefetch=0:ldbr=0:bp1_hit=158004:bp1_miss=11905:bp2_hit=159073:bp2_miss=10836:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=169909:on_time_tl=0:late_tl=0
+P(0)_prof_11f2e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=19:prefetch=0:ldbr=0:bp1_hit=1887:bp1_miss=21:bp2_hit=1889:bp2_miss=19:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1908:on_time_tl=0:late_tl=0
+P(0)_prof_127a2:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=273:prefetch=0:ldbr=0:bp1_hit=2241:bp1_miss=4237:bp2_hit=6205:bp2_miss=273:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6478:on_time_tl=0:late_tl=0
+P(0)_prof_10f1a:n=0.004:cpi=0.000000:wt=0.000000:et=0.000000:flush=9681:prefetch=0:ldbr=0:bp1_hit=42601:bp1_miss=9950:bp2_hit=42870:bp2_miss=9681:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=52551:on_time_tl=0:late_tl=0
+P(0)_prof_1212c:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=6308:bp1_miss=0:bp2_hit=6308:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6308:on_time_tl=0:late_tl=0
+P(0)_prof_128fe:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=4033:prefetch=0:ldbr=0:bp1_hit=77:bp1_miss=6132:bp2_hit=2176:bp2_miss=4033:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6209:on_time_tl=0:late_tl=0
+P(0)_prof_10fa2:n=0.004:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=34426:bp1_miss=11179:bp2_hit=45605:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=45605:on_time_tl=0:late_tl=0
+P(0)_prof_11fb2:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=55:prefetch=0:ldbr=0:bp1_hit=5829:bp1_miss=63:bp2_hit=5837:bp2_miss=55:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=5892:on_time_tl=0:late_tl=0
+P(0)_prof_133a6:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=115406:bp1_miss=0:bp2_hit=115406:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115406:on_time_tl=0:late_tl=0
+P(0)_prof_11e84:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=3:bp2_hit=2:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=3:on_time_tl=0:late_tl=0
+P(0)_prof_12288:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=69:prefetch=0:ldbr=0:bp1_hit=7071:bp1_miss=69:bp2_hit=7071:bp2_miss=69:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=7140:on_time_tl=0:late_tl=0
+P(0)_prof_10c4c:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=8196:prefetch=0:ldbr=0:bp1_hit=11228:bp1_miss=8197:bp2_hit=11229:bp2_miss=8196:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=19425:on_time_tl=0:late_tl=0
+P(0)_prof_11e5e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=18:bp1_miss=0:bp2_hit=18:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=18:on_time_tl=0:late_tl=0
+P(0)_prof_1289e:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=1572:prefetch=0:ldbr=0:bp1_hit=2336:bp1_miss=3872:bp2_hit=4636:bp2_miss=1572:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6208:on_time_tl=0:late_tl=0
+P(0)_prof_12464:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=600:prefetch=0:ldbr=0:bp1_hit=637:bp1_miss=601:bp2_hit=638:bp2_miss=600:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1238:on_time_tl=0:late_tl=0
+P(0)_prof_12cb4:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=5:bp1_miss=0:bp2_hit=5:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=5:on_time_tl=0:late_tl=0
+P(0)_prof_152be:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=115404:bp1_miss=0:bp2_hit=115404:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115404:on_time_tl=0:late_tl=0
+P(0)_prof_10d4c:n=0.020:cpi=0.000000:wt=0.000000:et=0.000000:flush=12933:prefetch=0:ldbr=0:bp1_hit=225428:bp1_miss=13178:bp2_hit=225673:bp2_miss=12933:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=238606:on_time_tl=0:late_tl=0
+P(0)_prof_10c3e:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=12249:prefetch=0:ldbr=0:bp1_hit=16392:bp1_miss=12249:bp2_hit=16392:bp2_miss=12249:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=28641:on_time_tl=0:late_tl=0
+P(0)_prof_12160:n=0.026:cpi=0.000000:wt=0.000000:et=0.000000:flush=6308:prefetch=0:ldbr=0:bp1_hit=308916:bp1_miss=6317:bp2_hit=308925:bp2_miss=6308:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=315233:on_time_tl=0:late_tl=0
+P(0)_prof_13372:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=254:bp1_miss=2:bp2_hit=254:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=256:on_time_tl=0:late_tl=0
+P(0)_prof_12104:n=0.003:cpi=0.000000:wt=0.000000:et=0.000000:flush=6309:prefetch=0:ldbr=0:bp1_hit=31531:bp1_miss=6317:bp2_hit=31539:bp2_miss=6309:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=37848:on_time_tl=0:late_tl=0
+P(0)_prof_136a4:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=2:bp2_hit=1:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=2:on_time_tl=0:late_tl=0
+P(0)_prof_10c60:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=5992:prefetch=0:ldbr=0:bp1_hit=18910:bp1_miss=5992:bp2_hit=18910:bp2_miss=5992:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=24902:on_time_tl=0:late_tl=0
+P(0)_prof_1326a:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=6953:prefetch=0:ldbr=0:bp1_hit=108233:bp1_miss=7171:bp2_hit=108451:bp2_miss=6953:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115404:on_time_tl=0:late_tl=0
+P(0)_prof_10da0:n=0.012:cpi=0.000000:wt=0.000000:et=0.000000:flush=5624:prefetch=0:ldbr=0:bp1_hit=135565:bp1_miss=5752:bp2_hit=135693:bp2_miss=5624:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=141317:on_time_tl=0:late_tl=0
+P(0)_prof_12f70:n=0.011:cpi=0.000000:wt=0.000000:et=0.000000:flush=61518:prefetch=0:ldbr=0:bp1_hit=66884:bp1_miss=67001:bp2_hit=72367:bp2_miss=61518:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=133885:on_time_tl=0:late_tl=0
+P(0)_prof_10cb6:n=0.019:cpi=0.000000:wt=0.000000:et=0.000000:flush=28415:prefetch=0:ldbr=0:bp1_hit=186006:bp1_miss=37877:bp2_hit=195468:bp2_miss=28415:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=223883:on_time_tl=0:late_tl=0
+P(0)_prof_10dac:n=0.011:cpi=0.000000:wt=0.000000:et=0.000000:flush=5151:prefetch=0:ldbr=0:bp1_hit=130127:bp1_miss=5577:bp2_hit=130553:bp2_miss=5151:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=135704:on_time_tl=0:late_tl=0
+P(0)_prof_133b6:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=115405:bp1_miss=0:bp2_hit=115405:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115405:on_time_tl=0:late_tl=0
+P(0)_prof_1078a:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=8751:prefetch=0:ldbr=0:bp1_hit=11842:bp1_miss=8751:bp2_hit=11842:bp2_miss=8751:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=20593:on_time_tl=0:late_tl=0
+P(0)_prof_12bae:n=0.022:cpi=0.000000:wt=0.000000:et=0.000000:flush=5:prefetch=0:ldbr=0:bp1_hit=262140:bp1_miss=8:bp2_hit=262143:bp2_miss=5:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=262148:on_time_tl=0:late_tl=0
+P(0)_prof_10d04:n=0.013:cpi=0.000000:wt=0.000000:et=0.000000:flush=12906:prefetch=0:ldbr=0:bp1_hit=138545:bp1_miss=13293:bp2_hit=138932:bp2_miss=12906:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=151838:on_time_tl=0:late_tl=0
+P(0)_prof_10abc:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_10ef6:n=0.005:cpi=0.000000:wt=0.000000:et=0.000000:flush=5967:prefetch=0:ldbr=0:bp1_hit=49508:bp1_miss=6048:bp2_hit=49589:bp2_miss=5967:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=55556:on_time_tl=0:late_tl=0
+P(0)_prof_12042:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=9:bp1_miss=0:bp2_hit=9:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=9:on_time_tl=0:late_tl=0
+P(0)_prof_152fa:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=115405:bp1_miss=0:bp2_hit=115405:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115405:on_time_tl=0:late_tl=0
+P(0)_prof_128d0:n=0.014:cpi=0.000000:wt=0.000000:et=0.000000:flush=39224:prefetch=0:ldbr=0:bp1_hit=134019:bp1_miss=40627:bp2_hit=135422:bp2_miss=39224:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=174646:on_time_tl=0:late_tl=0
+P(0)_prof_124cc:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=226:prefetch=0:ldbr=0:bp1_hit=367:bp1_miss=263:bp2_hit=404:bp2_miss=226:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=630:on_time_tl=0:late_tl=0
+P(0)_prof_12850:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=2611:bp1_miss=3599:bp2_hit=6210:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6210:on_time_tl=0:late_tl=0
+P(0)_prof_10cec:n=0.014:cpi=0.000000:wt=0.000000:et=0.000000:flush=14393:prefetch=0:ldbr=0:bp1_hit=153510:bp1_miss=14952:bp2_hit=154069:bp2_miss=14393:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=168462:on_time_tl=0:late_tl=0
+P(0)_prof_10ee8:n=0.008:cpi=0.000000:wt=0.000000:et=0.000000:flush=49211:prefetch=0:ldbr=0:bp1_hit=43591:bp1_miss=52556:bp2_hit=46936:bp2_miss=49211:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=96147:on_time_tl=0:late_tl=0
+P(0)_prof_10b22:n=0.005:cpi=0.000000:wt=0.000000:et=0.000000:flush=23194:prefetch=0:ldbr=0:bp1_hit=35196:bp1_miss=23194:bp2_hit=35196:bp2_miss=23194:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=58390:on_time_tl=0:late_tl=0
+P(0)_prof_128b8:n=0.012:cpi=0.000000:wt=0.000000:et=0.000000:flush=2115:prefetch=0:ldbr=0:bp1_hit=146262:bp1_miss=2115:bp2_hit=146262:bp2_miss=2115:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=148377:on_time_tl=0:late_tl=0
+P(0)_prof_11e68:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=19:prefetch=0:ldbr=0:bp1_hit=1887:bp1_miss=21:bp2_hit=1889:bp2_miss=19:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1908:on_time_tl=0:late_tl=0
+P(0)_prof_1206a:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=6:prefetch=0:ldbr=0:bp1_hit=6304:bp1_miss=6:bp2_hit=6304:bp2_miss=6:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6310:on_time_tl=0:late_tl=0
+P(0)_prof_10f86:n=0.008:cpi=0.000000:wt=0.000000:et=0.000000:flush=45112:prefetch=0:ldbr=0:bp1_hit=42345:bp1_miss=48742:bp2_hit=45975:bp2_miss=45112:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=91087:on_time_tl=0:late_tl=0
+P(0)_prof_1239a:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=17:prefetch=0:ldbr=0:bp1_hit=239:bp1_miss=17:bp2_hit=239:bp2_miss=17:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=256:on_time_tl=0:late_tl=0
+P(0)_prof_13684:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=2:bp1_miss=0:bp2_hit=2:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=2:on_time_tl=0:late_tl=0
+P(0)_prof_1259c:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_10f46:n=0.004:cpi=0.000000:wt=0.000000:et=0.000000:flush=5051:prefetch=0:ldbr=0:bp1_hit=45048:bp1_miss=5105:bp2_hit=45102:bp2_miss=5051:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=50153:on_time_tl=0:late_tl=0
+P(0)_prof_128a2:n=0.008:cpi=0.000000:wt=0.000000:et=0.000000:flush=25413:prefetch=0:ldbr=0:bp1_hit=69483:bp1_miss=25921:bp2_hit=69991:bp2_miss=25413:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=95404:on_time_tl=0:late_tl=0
+P(0)_prof_10d7c:n=0.015:cpi=0.000000:wt=0.000000:et=0.000000:flush=9154:prefetch=0:ldbr=0:bp1_hit=169423:bp1_miss=9325:bp2_hit=169594:bp2_miss=9154:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=178748:on_time_tl=0:late_tl=0
+P(0)_prof_11b1e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=41:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=41:bp2_hit=0:bp2_miss=41:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=41:on_time_tl=0:late_tl=0
+P(0)_prof_12392:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=19:prefetch=0:ldbr=0:bp1_hit=237:bp1_miss=19:bp2_hit=237:bp2_miss=19:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=256:on_time_tl=0:late_tl=0
+P(0)_prof_133a2:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_12944:n=0.003:cpi=0.000000:wt=0.000000:et=0.000000:flush=3447:prefetch=0:ldbr=0:bp1_hit=27288:bp1_miss=5003:bp2_hit=28844:bp2_miss=3447:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=32291:on_time_tl=0:late_tl=0
+P(0)_prof_10d64:n=0.019:cpi=0.000000:wt=0.000000:et=0.000000:flush=12083:prefetch=0:ldbr=0:bp1_hit=211689:bp1_miss=13922:bp2_hit=213528:bp2_miss=12083:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=225611:on_time_tl=0:late_tl=0
+P(0)_prof_1282e:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=1277:prefetch=0:ldbr=0:bp1_hit=2282:bp1_miss=3926:bp2_hit=4931:bp2_miss=1277:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6208:on_time_tl=0:late_tl=0
+P(0)_prof_132ba:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=115302:bp1_miss=102:bp2_hit=115404:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115404:on_time_tl=0:late_tl=0
+P(0)_prof_12a46:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=34:bp1_miss=743:bp2_hit=777:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=777:on_time_tl=0:late_tl=0
+P(0)_prof_10d1c:n=0.011:cpi=0.000000:wt=0.000000:et=0.000000:flush=11501:prefetch=0:ldbr=0:bp1_hit=126430:bp1_miss=11790:bp2_hit=126719:bp2_miss=11501:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=138220:on_time_tl=0:late_tl=0
+P(0)_prof_1223e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=199:prefetch=0:ldbr=0:bp1_hit=430:bp1_miss=200:bp2_hit=431:bp2_miss=199:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=630:on_time_tl=0:late_tl=0
+P(0)_prof_11f0e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=14:bp1_miss=0:bp2_hit=14:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=14:on_time_tl=0:late_tl=0
+P(0)_prof_128fa:n=0.025:cpi=0.000000:wt=0.000000:et=0.000000:flush=6319:prefetch=0:ldbr=0:bp1_hit=296548:bp1_miss=9980:bp2_hit=300209:bp2_miss=6319:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=306528:on_time_tl=0:late_tl=0
+P(0)_prof_130f4:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_152c4:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=115404:bp1_miss=0:bp2_hit=115404:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115404:on_time_tl=0:late_tl=0
+P(0)_prof_13126:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_128b2:n=0.008:cpi=0.000000:wt=0.000000:et=0.000000:flush=21361:prefetch=0:ldbr=0:bp1_hit=59129:bp1_miss=35466:bp2_hit=73234:bp2_miss=21361:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=94595:on_time_tl=0:late_tl=0
+P(0)_prof_124ae:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=6:bp1_miss=0:bp2_hit=6:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6:on_time_tl=0:late_tl=0
+P(0)_prof_10c9e:n=0.023:cpi=0.000000:wt=0.000000:et=0.000000:flush=47274:prefetch=0:ldbr=0:bp1_hit=232273:bp1_miss=48792:bp2_hit=233791:bp2_miss=47274:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=281065:on_time_tl=0:late_tl=0
+P(0)_prof_122b4:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=6310:bp1_miss=0:bp2_hit=6310:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6310:on_time_tl=0:late_tl=0
+P(0)_prof_11c42:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=831:prefetch=0:ldbr=0:bp1_hit=3620:bp1_miss=874:bp2_hit=3663:bp2_miss=831:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4494:on_time_tl=0:late_tl=0
+P(0)_prof_124b6:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=211:prefetch=0:ldbr=0:bp1_hit=419:bp1_miss=211:bp2_hit=419:bp2_miss=211:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=630:on_time_tl=0:late_tl=0
+P(0)_prof_10a54:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=23:prefetch=0:ldbr=0:bp1_hit=233:bp1_miss=23:bp2_hit=233:bp2_miss=23:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=256:on_time_tl=0:late_tl=0
+P(0)_prof_1522e:n=0.020:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=243935:bp1_miss=0:bp2_hit=243935:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=243935:on_time_tl=0:late_tl=0
+P(0)_prof_119f6:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=855:prefetch=0:ldbr=0:bp1_hit=3654:bp1_miss=855:bp2_hit=3654:bp2_miss=855:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4509:on_time_tl=0:late_tl=0
+P(0)_prof_128a6:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=5710:prefetch=0:ldbr=0:bp1_hit=22666:bp1_miss=5710:bp2_hit=22666:bp2_miss=5710:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=28376:on_time_tl=0:late_tl=0
+P(0)_prof_11bf8:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=9526:prefetch=0:ldbr=0:bp1_hit=9753:bp1_miss=9606:bp2_hit=9833:bp2_miss=9526:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=19359:on_time_tl=0:late_tl=0
+P(0)_prof_121fe:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=600:prefetch=0:ldbr=0:bp1_hit=638:bp1_miss=600:bp2_hit=638:bp2_miss=600:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1238:on_time_tl=0:late_tl=0
+P(0)_prof_12f74:n=0.005:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=55951:bp1_miss=5566:bp2_hit=61517:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=61517:on_time_tl=0:late_tl=0
+P(0)_prof_12ea4:n=0.009:cpi=0.000000:wt=0.000000:et=0.000000:flush=23:prefetch=0:ldbr=0:bp1_hit=112218:bp1_miss=169:bp2_hit=112364:bp2_miss=23:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=112387:on_time_tl=0:late_tl=0
+P(0)_prof_11dbc:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=5:prefetch=0:ldbr=0:bp1_hit=586:bp1_miss=62:bp2_hit=643:bp2_miss=5:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=648:on_time_tl=0:late_tl=0
+P(0)_prof_10cd4:n=0.016:cpi=0.000000:wt=0.000000:et=0.000000:flush=19638:prefetch=0:ldbr=0:bp1_hit=170386:bp1_miss=20245:bp2_hit=170993:bp2_miss=19638:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=190631:on_time_tl=0:late_tl=0
+P(0)_prof_124ec:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=7:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=630:bp2_hit=623:bp2_miss=7:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=630:on_time_tl=0:late_tl=0
+P(0)_prof_12212:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=912:bp1_miss=2:bp2_hit=912:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=914:on_time_tl=0:late_tl=0
+P(0)_prof_132fa:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_11ed8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=21:prefetch=0:ldbr=0:bp1_hit=301:bp1_miss=21:bp2_hit=301:bp2_miss=21:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=322:on_time_tl=0:late_tl=0
+P(0)_prof_12918:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1346:prefetch=0:ldbr=0:bp1_hit=2589:bp1_miss=1521:bp2_hit=2764:bp2_miss=1346:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4110:on_time_tl=0:late_tl=0
+P(0)_prof_124de:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=45:prefetch=0:ldbr=0:bp1_hit=131:bp1_miss=45:bp2_hit=131:bp2_miss=45:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=176:on_time_tl=0:late_tl=0
+P(0)_prof_12dba:n=0.008:cpi=0.000000:wt=0.000000:et=0.000000:flush=396:prefetch=0:ldbr=0:bp1_hit=100989:bp1_miss=396:bp2_hit=100989:bp2_miss=396:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=101385:on_time_tl=0:late_tl=0
+P(0)_prof_12ec6:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=153:bp1_miss=0:bp2_hit=153:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=153:on_time_tl=0:late_tl=0
+P(0)_prof_12dc8:n=0.008:cpi=0.000000:wt=0.000000:et=0.000000:flush=11135:prefetch=0:ldbr=0:bp1_hit=89961:bp1_miss=11426:bp2_hit=90252:bp2_miss=11135:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=101387:on_time_tl=0:late_tl=0
+P(0)_prof_133e0:n=0.009:cpi=0.000000:wt=0.000000:et=0.000000:flush=1988:prefetch=0:ldbr=0:bp1_hit=108823:bp1_miss=2274:bp2_hit=109109:bp2_miss=1988:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=111097:on_time_tl=0:late_tl=0
+P(0)_prof_123d0:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=6:prefetch=0:ldbr=0:bp1_hit=9:bp1_miss=7:bp2_hit=10:bp2_miss=6:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=16:on_time_tl=0:late_tl=0
+P(0)_prof_12dec:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=120:bp1_miss=860:bp2_hit=979:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=980:on_time_tl=0:late_tl=0
+P(0)_prof_10bca:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=1:bp2_hit=1:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=2:on_time_tl=0:late_tl=0
+P(0)_prof_10de4:n=0.009:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=106816:bp1_miss=4667:bp2_hit=111483:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=111483:on_time_tl=0:late_tl=0
+P(0)_prof_11ecc:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=304:bp1_miss=0:bp2_hit=304:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=304:on_time_tl=0:late_tl=0
+P(0)_prof_10dfa:n=0.009:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=106563:bp1_miss=4920:bp2_hit=111483:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=111483:on_time_tl=0:late_tl=0
+P(0)_prof_11ee2:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=10:bp1_miss=0:bp2_hit=10:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=10:on_time_tl=0:late_tl=0
+P(0)_prof_11fe6:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=3:bp2_hit=3:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4:on_time_tl=0:late_tl=0
+P(0)_prof_11fa8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=54:bp1_miss=0:bp2_hit=54:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=54:on_time_tl=0:late_tl=0
+P(0)_prof_10b94:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=2:bp2_hit=1:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=2:on_time_tl=0:late_tl=0
+P(0)_prof_10b5e:n=0.019:cpi=0.000000:wt=0.000000:et=0.000000:flush=49565:prefetch=0:ldbr=0:bp1_hit=184159:bp1_miss=49565:bp2_hit=184159:bp2_miss=49565:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=233724:on_time_tl=0:late_tl=0
+P(0)_prof_12080:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=6295:bp1_miss=15:bp2_hit=6309:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6310:on_time_tl=0:late_tl=0
+P(0)_prof_11efc:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=5:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=6:bp2_hit=2:bp2_miss=5:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=7:on_time_tl=0:late_tl=0
+P(0)_prof_12336:n=0.026:cpi=0.000000:wt=0.000000:et=0.000000:flush=6309:prefetch=0:ldbr=0:bp1_hit=308988:bp1_miss=6317:bp2_hit=308996:bp2_miss=6309:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=315305:on_time_tl=0:late_tl=0
+P(0)_prof_10bd2:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=2:bp1_miss=0:bp2_hit=2:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=2:on_time_tl=0:late_tl=0
+P(0)_prof_120f4:n=0.003:cpi=0.000000:wt=0.000000:et=0.000000:flush=12865:prefetch=0:ldbr=0:bp1_hit=18670:bp1_miss=12870:bp2_hit=18675:bp2_miss=12865:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=31540:on_time_tl=0:late_tl=0
+P(0)_prof_12168:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=7:prefetch=0:ldbr=0:bp1_hit=6292:bp1_miss=15:bp2_hit=6300:bp2_miss=7:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6307:on_time_tl=0:late_tl=0
+P(0)_prof_119c8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=41:bp1_miss=0:bp2_hit=41:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=41:on_time_tl=0:late_tl=0
+P(0)_prof_11a02:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=42:prefetch=0:ldbr=0:bp1_hit=4427:bp1_miss=82:bp2_hit=4467:bp2_miss=42:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4509:on_time_tl=0:late_tl=0
+P(0)_prof_11a9c:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=41:bp1_miss=0:bp2_hit=41:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=41:on_time_tl=0:late_tl=0
+P(0)_prof_11ada:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=596:prefetch=0:ldbr=0:bp1_hit=3910:bp1_miss=599:bp2_hit=3913:bp2_miss=596:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4509:on_time_tl=0:late_tl=0
+P(0)_prof_12bee:n=0.020:cpi=0.000000:wt=0.000000:et=0.000000:flush=3:prefetch=0:ldbr=0:bp1_hit=242162:bp1_miss=6:bp2_hit=242165:bp2_miss=3:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=242168:on_time_tl=0:late_tl=0
+P(0)_prof_11b06:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=4128:prefetch=0:ldbr=0:bp1_hit=5090:bp1_miss=4128:bp2_hit=5090:bp2_miss=4128:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=9218:on_time_tl=0:late_tl=0
+P(0)_prof_11b3e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=42:prefetch=0:ldbr=0:bp1_hit=4451:bp1_miss=42:bp2_hit=4451:bp2_miss=42:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4493:on_time_tl=0:late_tl=0
+P(0)_prof_11b66:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=252:prefetch=0:ldbr=0:bp1_hit=19465:bp1_miss=252:bp2_hit=19465:bp2_miss=252:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=19717:on_time_tl=0:late_tl=0
+P(0)_prof_12836:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=2779:bp1_miss=3429:bp2_hit=6208:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6208:on_time_tl=0:late_tl=0
+P(0)_prof_11b88:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=1599:prefetch=0:ldbr=0:bp1_hit=18118:bp1_miss=1599:bp2_hit=18118:bp2_miss=1599:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=19717:on_time_tl=0:late_tl=0
+P(0)_prof_11b9a:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=2872:prefetch=0:ldbr=0:bp1_hit=15222:bp1_miss=2896:bp2_hit=15246:bp2_miss=2872:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=18118:on_time_tl=0:late_tl=0
+P(0)_prof_11bb4:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=42:prefetch=0:ldbr=0:bp1_hit=4409:bp1_miss=42:bp2_hit=4409:bp2_miss=42:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4451:on_time_tl=0:late_tl=0
+P(0)_prof_10ba4:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=1:bp2_hit=1:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=2:on_time_tl=0:late_tl=0
+P(0)_prof_11bdc:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=211:prefetch=0:ldbr=0:bp1_hit=19359:bp1_miss=211:bp2_hit=19359:bp2_miss=211:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=19570:on_time_tl=0:late_tl=0
+P(0)_prof_12484:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_11c10:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=3761:prefetch=0:ldbr=0:bp1_hit=15116:bp1_miss=3783:bp2_hit=15138:bp2_miss=3761:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=18899:on_time_tl=0:late_tl=0
+P(0)_prof_11c7e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1338:prefetch=0:ldbr=0:bp1_hit=3121:bp1_miss=1373:bp2_hit=3156:bp2_miss=1338:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4494:on_time_tl=0:late_tl=0
+P(0)_prof_11da4:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=43:prefetch=0:ldbr=0:bp1_hit=3066:bp1_miss=91:bp2_hit=3114:bp2_miss=43:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=3157:on_time_tl=0:late_tl=0
+P(0)_prof_12d92:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=128:bp1_miss=850:bp2_hit=977:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=978:on_time_tl=0:late_tl=0
+P(0)_prof_11caa:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=154:prefetch=0:ldbr=0:bp1_hit=1330:bp1_miss=154:bp2_hit=1330:bp2_miss=154:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1484:on_time_tl=0:late_tl=0
+P(0)_prof_11cbe:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=1278:bp1_miss=59:bp2_hit=1336:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1337:on_time_tl=0:late_tl=0
+P(0)_prof_1253c:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=344:bp1_miss=0:bp2_hit=344:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=344:on_time_tl=0:late_tl=0
+P(0)_prof_11cc8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=42:bp1_miss=0:bp2_hit=42:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=42:on_time_tl=0:late_tl=0
+P(0)_prof_107c6:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=152:prefetch=0:ldbr=0:bp1_hit=7721:bp1_miss=152:bp2_hit=7721:bp2_miss=152:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=7873:on_time_tl=0:late_tl=0
+P(0)_prof_11ce8:n=0.004:cpi=0.000000:wt=0.000000:et=0.000000:flush=4618:prefetch=0:ldbr=0:bp1_hit=41294:bp1_miss=4659:bp2_hit=41335:bp2_miss=4618:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=45953:on_time_tl=0:late_tl=0
+P(0)_prof_13216:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=115405:bp1_miss=0:bp2_hit=115405:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115405:on_time_tl=0:late_tl=0
+P(0)_prof_11cf4:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=4572:bp1_miss=42:bp2_hit=4613:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4614:on_time_tl=0:late_tl=0
+P(0)_prof_124fc:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=4:bp1_miss=2:bp2_hit=4:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6:on_time_tl=0:late_tl=0
+P(0)_prof_11d02:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=43:prefetch=0:ldbr=0:bp1_hit=4530:bp1_miss=84:bp2_hit=4571:bp2_miss=43:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4614:on_time_tl=0:late_tl=0
+P(0)_prof_13228:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=13126:bp1_miss=1:bp2_hit=13126:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=13127:on_time_tl=0:late_tl=0
+P(0)_prof_11d06:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=42:bp2_hit=42:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=42:on_time_tl=0:late_tl=0
+P(0)_prof_1250e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_1219a:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=8:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=42:bp2_hit=34:bp2_miss=8:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=42:on_time_tl=0:late_tl=0
+P(0)_prof_12a16:n=0.025:cpi=0.000000:wt=0.000000:et=0.000000:flush=33415:prefetch=0:ldbr=0:bp1_hit=267903:bp1_miss=34524:bp2_hit=269012:bp2_miss=33415:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=302427:on_time_tl=0:late_tl=0
+P(0)_prof_121a2:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=7:bp2_hit=5:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=7:on_time_tl=0:late_tl=0
+P(0)_prof_127de:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=907:prefetch=0:ldbr=0:bp1_hit=7992:bp1_miss=1196:bp2_hit=8281:bp2_miss=907:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=9188:on_time_tl=0:late_tl=0
+P(0)_prof_123a4:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=14:bp1_miss=2:bp2_hit=14:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=16:on_time_tl=0:late_tl=0
+P(0)_prof_1290c:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1852:prefetch=0:ldbr=0:bp1_hit=1589:bp1_miss=2521:bp2_hit=2258:bp2_miss=1852:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4110:on_time_tl=0:late_tl=0
+P(0)_prof_12d46:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=6:prefetch=0:ldbr=0:bp1_hit=1094:bp1_miss=7:bp2_hit=1095:bp2_miss=6:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1101:on_time_tl=0:late_tl=0
+P(0)_prof_12d4c:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=3:bp1_miss=2:bp2_hit=3:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=5:on_time_tl=0:late_tl=0
+P(0)_prof_121b8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=4:bp1_miss=2:bp2_hit=4:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6:on_time_tl=0:late_tl=0
+P(0)_prof_121be:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=1:bp2_hit=0:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_121e6:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=345:prefetch=0:ldbr=0:bp1_hit=569:bp1_miss=345:bp2_hit=569:bp2_miss=345:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=914:on_time_tl=0:late_tl=0
+P(0)_prof_123e8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=5:prefetch=0:ldbr=0:bp1_hit=10:bp1_miss=6:bp2_hit=11:bp2_miss=5:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=16:on_time_tl=0:late_tl=0
+P(0)_prof_12232:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=6:bp1_miss=0:bp2_hit=6:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6:on_time_tl=0:late_tl=0
+P(0)_prof_12258:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=6:bp1_miss=0:bp2_hit=6:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6:on_time_tl=0:late_tl=0
+P(0)_prof_1225c:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=6:bp1_miss=0:bp2_hit=6:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6:on_time_tl=0:late_tl=0
+P(0)_prof_1548e:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=7873:bp1_miss=0:bp2_hit=7873:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=7873:on_time_tl=0:late_tl=0
+P(0)_prof_11e26:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=3:bp1_miss=0:bp2_hit=3:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=3:on_time_tl=0:late_tl=0
+P(0)_prof_12260:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=6:bp1_miss=0:bp2_hit=6:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6:on_time_tl=0:late_tl=0
+P(0)_prof_12274:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=550:prefetch=0:ldbr=0:bp1_hit=6590:bp1_miss=550:bp2_hit=6590:bp2_miss=550:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=7140:on_time_tl=0:late_tl=0
+P(0)_prof_12292:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=7:prefetch=0:ldbr=0:bp1_hit=61:bp1_miss=7:bp2_hit=61:bp2_miss=7:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=68:on_time_tl=0:late_tl=0
+P(0)_prof_122a6:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=5:bp1_miss=1:bp2_hit=5:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=6:on_time_tl=0:late_tl=0
+P(0)_prof_15488:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=7873:bp1_miss=0:bp2_hit=7873:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=7873:on_time_tl=0:late_tl=0
+P(0)_prof_10aa6:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=108:bp1_miss=2:bp2_hit=109:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=110:on_time_tl=0:late_tl=0
+P(0)_prof_12402:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=20:prefetch=0:ldbr=0:bp1_hit=156:bp1_miss=20:bp2_hit=156:bp2_miss=20:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=176:on_time_tl=0:late_tl=0
+P(0)_prof_12c90:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=254:bp1_miss=2:bp2_hit=254:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=256:on_time_tl=0:late_tl=0
+P(0)_prof_1241c:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_12454:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=345:prefetch=0:ldbr=0:bp1_hit=569:bp1_miss=345:bp2_hit=569:bp2_miss=345:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=914:on_time_tl=0:late_tl=0
+P(0)_prof_152f0:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=115405:bp1_miss=0:bp2_hit=115405:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115405:on_time_tl=0:late_tl=0
+P(0)_prof_11bfe:n=0.002:cpi=0.000000:wt=0.000000:et=0.000000:flush=1015:prefetch=0:ldbr=0:bp1_hit=18552:bp1_miss=1018:bp2_hit=18555:bp2_miss=1015:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=19570:on_time_tl=0:late_tl=0
+P(0)_prof_12472:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=912:bp1_miss=2:bp2_hit=912:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=914:on_time_tl=0:late_tl=0
+P(0)_prof_124c8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=172:prefetch=0:ldbr=0:bp1_hit=31:bp1_miss=206:bp2_hit=65:bp2_miss=172:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=237:on_time_tl=0:late_tl=0
+P(0)_prof_12954:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1373:prefetch=0:ldbr=0:bp1_hit=2547:bp1_miss=1564:bp2_hit=2738:bp2_miss=1373:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4111:on_time_tl=0:late_tl=0
+P(0)_prof_1251a:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_prof_12582:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=345:prefetch=0:ldbr=0:bp1_hit=16840:bp1_miss=345:bp2_hit=16840:bp2_miss=345:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=17185:on_time_tl=0:late_tl=0
+P(0)_prof_12b88:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=5:prefetch=0:ldbr=0:bp1_hit=1016:bp1_miss=8:bp2_hit=1019:bp2_miss=5:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1024:on_time_tl=0:late_tl=0
+P(0)_prof_13244:n=0.010:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=115374:bp1_miss=29:bp2_hit=115403:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=115403:on_time_tl=0:late_tl=0
+P(0)_prof_12596:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=342:bp1_miss=2:bp2_hit=342:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=344:on_time_tl=0:late_tl=0
+P(0)_prof_12adc:n=0.022:cpi=0.000000:wt=0.000000:et=0.000000:flush=4:prefetch=0:ldbr=0:bp1_hit=263648:bp1_miss=6:bp2_hit=263650:bp2_miss=4:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=263654:on_time_tl=0:late_tl=0
+P(0)_prof_12af8:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=1:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=4:bp2_hit=3:bp2_miss=1:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4:on_time_tl=0:late_tl=0
+P(0)_prof_12bc0:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=4:bp1_miss=0:bp2_hit=4:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=4:on_time_tl=0:late_tl=0
+P(0)_prof_1520e:n=0.020:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=243936:bp1_miss=0:bp2_hit=243936:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=243936:on_time_tl=0:late_tl=0
+P(0)_prof_12c04:n=0.011:cpi=0.000000:wt=0.000000:et=0.000000:flush=3:prefetch=0:ldbr=0:bp1_hit=131068:bp1_miss=4:bp2_hit=131069:bp2_miss=3:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=131072:on_time_tl=0:late_tl=0
+P(0)_prof_10e88:n=0.001:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=14217:bp1_miss=0:bp2_hit=14217:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=14217:on_time_tl=0:late_tl=0
+P(0)_prof_12c1e:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=2:bp1_miss=0:bp2_hit=2:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=2:on_time_tl=0:late_tl=0
+P(0)_prof_10bc6:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=2:prefetch=0:ldbr=0:bp1_hit=0:bp1_miss=3:bp2_hit=1:bp2_miss=2:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=3:on_time_tl=0:late_tl=0
+P(0)_prof_125aa:n=0.000:cpi=0.000000:wt=0.000000:et=0.000000:flush=0:prefetch=0:ldbr=0:bp1_hit=1:bp1_miss=0:bp2_hit=1:bp2_miss=0:bp3_hit=0:bp3_miss=0:bp_hit2_miss3=0:bp_hit3_miss2=0:no_tl=1:on_time_tl=0:late_tl=0
+P(0)_robUsed:n=99526947::v=13.135374
+P(0)_rrobUsed:n=102955462::v=7.480750
+P(0)_uipc:n=31::v=90.953639
+P(0)_zeroDinst:nBTAC=0.000000
+powerTime=0.000000
+progressedTime:max=2721226133.000000:n=1
+S(0):DetailInst=3003099970.000000
+S(0):DetailTime=3651674.000000
+S(0):globalClock_Timing=107556464.000000
+S(0):InitInst=0.000000
+S(0):InitTime=0.000000
+S(0):nSwitches=96.000000
+S(0):RabbitInst=903900031.000000
+S(0):RabbitTime=15470679.000000
+S(0):TimingInst=93000000.000000
+S(0):TimingTime=110308597.000000
+S(0):WarmupInst=0.000000
+S(0):WarmupTime=0.000000
+#END GStats::report done

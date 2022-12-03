@@ -1,0 +1,230 @@
+ CREATE  Db Header and Db Primal  ... 
+  NEW DB [ 3] Created.
+
+VORTEX INPUT PARAMETERS::
+ 	MESSAGE       FileName:	 vortex.msg           
+	OUTPUT        FileName:	 vortex1.out          
+	DISK CACHE    FileName:	 NULL                 
+	PART DB       FileName:	 parts.db             
+	DRAW DB       FileName:	 draw.db              
+	PERSON DB     FileName:	 emp.db               
+	PERSONS Data  FileName:	 data/spec00/255.vortex/persons.1k
+	PARTS         Count   :	 32000   
+	OUTER         Loops   :	 1       
+	INNER         Loops   :	 9       
+	LOOKUP        Parts   :	 1000    
+	DELETE        Parts   :	 16000   
+	STUFF         Parts   :	 16000   
+	DEPTH         Traverse:	 3       
+	% DECREASE    Parts   :	 0       
+	% INCREASE    LookUps :	 0       
+	% INCREASE    Deletes :	 0       
+	% INCREASE    Stuffs  :	 0       
+	FREEZE_PACKETS        :	 1       
+	ALLOC_CHUNKS          :	 50000   
+	EXTEND_CHUNKS         :	 10000   
+	DELETE Draw objects   :	 True                 
+	DELETE Part objects   :	 False                
+	QUE_BUG               :	 1000
+	VOID_BOUNDARY         :	 268435456
+	VOID_RESERVE          :	 4194304
+
+	COMMIT_DBS            :	 False
+
+
+
+ BMT TEST :: files...
+      EdbName           := PartLib
+      EdbFileName       := parts.db
+      DrwName           := DrawLib
+      DrwFileName       := draw.db
+      EmpName           := PersonLib
+      EmpFileName       := emp.db
+
+      Swap to DiskCache := False
+      Freeze the cache  := True
+
+
+ BMT TEST :: parms...
+      DeBug modulo      := 1000    
+      Create Parts count:= 32000   
+      Outer Loops       := 1       
+      Inner Loops       := 9       
+      Look Ups          := 1000    
+      Delete Parts      := 16000   
+      Stuff Parts       := 16000   
+      Traverse Limit    := 3       
+      Delete Draws      := True
+      Delete Parts      := False
+      Delete ALL Parts  := after every <mod  0>Outer Loop
+
+ INITIALIZE LIBRARY ::
+
+ INITIALIZE SCHEMA ::
+  Primal_CreateDb Accessed !!!
+ CREATE  Db Header and Db Primal  ... 
+  NEW DB [ 4] Created.
+   PartLibCreate:: Db[  4]; VpartsDir=   1
+
+ Part Count=       1
+
+ Initialize the Class maps
+ LIST HEADS  loaded ... DbListHead_Class = 207
+                        DbListNode_Class = 206
+
+...NOTE... ShellLoadCode:: Class[ 228] will NOT be Activated.
+
+
+...NOTE... ShellLoadCode:: Class[ 229] will NOT be Activated.
+
+  Primal_CreateDb Accessed !!!
+ CREATE  Db Header and Db Primal  ... 
+  NEW DB [ 5] Created.
+   DrawLibCreate:: Db[  5]; VpartsDir=   1
+
+ Initialize the Class maps of this schema.
+  Primal_CreateDb Accessed !!!
+ CREATE  Db Header and Db Primal  ... 
+  NEW DB [ 6] Created.
+
+ ***NOTE***  Persons Library Extended!
+
+ Create <131072> Persons.
+ ItNum      0. Person[  6:       5]. Name= Riddell         , Robert V.       ;
+
+ LAST Person Read::
+ ItNum   1000. Person[  6:    2003]. Name= Stanton         , Miklos Q.       ;
+
+ BUILD <Query0>   for <Part2>  class::
+
+  if (link[1].length >=    5) ::
+
+ Build Query2 for <Address>   class::
+
+  if (State == CA || State == T*)
+
+ Build Query1 for <Person>    class::
+
+  if (LastName  >= H* && LastName <= P* && Query0(Residence)) ::
+
+ BUILD <Query3> for <DrawObj>    class::
+
+  if (Id  >= 3000 
+  &&  (Id >= 3000 && Id <= 3001)
+  &&  Id >= 3002)
+
+ BUILD <Query4> for <NamedDrawObj>   class::
+
+  if (Nam ==       Pre*
+  || (Nam ==   ??Mid???  || == Pre??Mid??   || ==     ??Post
+       || ==  Pre??Post  || == ??Mid???Post   || == Pre??Mid???Post)
+  && Id <= 7)
+      SEED          :=    1008; Swap     = False; RgnEntries =185000
+
+ OUTER LOOP [  1] :  NewParts = 32000 LookUps = 1000 StuffParts = 16000.
+
+ Create 32000 New Parts
+ Create Part      1. Token[  4:       2].
+ Create Part   1000. Token[  4:    1001].
+ Create Part   2000. Token[  4:    2001].
+ Create Part   3000. Token[  4:    3001].
+ Create Part   4000. Token[  4:    4001].
+ Create Part   5000. Token[  4:    5001].
+ Create Part   5999. Token[  4:    6000].
+ Create Part   6999. Token[  4:    7000].
+ Create Part   7999. Token[  4:    8000].
+ Create Part   8999. Token[  4:    9000].
+ Create Part   9999. Token[  4:   10000].
+ Create Part  10999. Token[  4:   11000].
+ Create Part  11999. Token[  4:   12000].
+ Create Part  12999. Token[  4:   13000].
+ Create Part  13999. Token[  4:   14000].
+ Create Part  14999. Token[  4:   15000].
+ Create Part  15999. Token[  4:   16000].
+ Create Part  16999. Token[  4:   17000].
+ Create Part  17999. Token[  4:   18000].
+ Create Part  18999. Token[  4:   19000].
+ Create Part  19999. Token[  4:   20000].
+ Create Part  20999. Token[  4:   21000].
+ Create Part  21999. Token[  4:   22000].
+ Create Part  22999. Token[  4:   23000].
+ Create Part  23999. Token[  4:   24000].
+ Create Part  24999. Token[  4:   25000].
+ Create Part  25999. Token[  4:   26000].
+ Create Part  26999. Token[  4:   27000].
+ Create Part  27999. Token[  4:   28000].
+ Create Part  28999. Token[  4:   29000].
+ Create Part  29999. Token[  4:   30000].
+ Create Part  30999. Token[  4:   31000].
+
+  < 32000> Parts Created. CurrentId= 31998
+
+ Connect each instantiated Part TO 3 unique Parts
+ Connect Part      1. Token[  4:       2]
+   Connect  Part  21849. Token[  4:   21850] FromList= 21850.
+   Connect  Part  17760. Token[  4:   17761] FromList= 17761.
+   Connect  Part  10459. Token[  4:   10460] FromList= 10460.
+ Connect Part   1001. Token[  4:    1002]
+ Connect Part   2001. Token[  4:    2002]
+ Connect Part   3001. Token[  4:    3002]
+ Connect Part   4001. Token[  4:    4002]
+ Connect Part   5001. Token[  4:    5002]
+ Connect Part   6001. Token[  4:    6002]
+ Connect Part   7001. Token[  4:    7002]
+ Connect Part   8001. Token[  4:    8002]
+ Connect Part   9001. Token[  4:    9002]
+ Connect Part  10001. Token[  4:   10002]
+ Connect Part  11001. Token[  4:   11002]
+ Connect Part  12001. Token[  4:   12002]
+ Connect Part  13001. Token[  4:   13002]
+ Connect Part  14001. Token[  4:   14002]
+ Connect Part  15001. Token[  4:   15002]
+ Connect Part  16001. Token[  4:   16002]
+ Connect Part  17001. Token[  4:   17002]
+ Connect Part  18001. Token[  4:   18002]
+ Connect Part  19001. Token[  4:   19002]
+ Connect Part  20001. Token[  4:   20002]
+ Connect Part  21001. Token[  4:   21002]
+ Connect Part  22001. Token[  4:   22002]
+ Connect Part  23001. Token[  4:   23002]
+ Connect Part  24001. Token[  4:   24002]
+ Connect Part  25001. Token[  4:   25002]
+ Connect Part  26001. Token[  4:   26002]
+ Connect Part  27001. Token[  4:   27002]
+ Connect Part  28001. Token[  4:   28002]
+ Connect Part  29001. Token[  4:   29002]
+ Connect Part  30001. Token[  4:   30002]
+ Connect Part  31001. Token[  4:   31002]
+
+ SET  <DrawObjs>    entries::
+      1. [  5:       5]  := <1       >; @[:     6]
+   1001. [  5:    2631]  := <1001    >; @[:  2632]
+   2001. [  5:    5256]  := <2001    >; @[:  5257]
+   3001. [  5:    7881]  := <3001    >; @[:  7882]
+   4001. [  5:   10506]  := <4001    >; @[: 10507]
+   5001. [  5:   13131]  := <5001    >; @[: 13132]
+   6001. [  5:   15756]  := <6001    >; @[: 15757]
+   7001. [  5:   18381]  := <7001    >; @[: 18382]
+   8001. [  5:   21006]  := <8001    >; @[: 21007]
+   9001. [  5:   23631]  := <9001    >; @[: 23632]
+  10001. [  5:   26256]  := <10001   >; @[: 26257]
+  11001. [  5:   28881]  := <11001   >; @[: 28882]
+  12001. [  5:   31506]  := <12001   >; @[: 31507]
+  13001. [  5:   34131]  := <13001   >; @[: 34132]
+  14001. [  5:   36756]  := <14001   >; @[: 36757]
+  15001. [  5:   39381]  := <15001   >; @[: 39382]
+  16001. [  5:   42006]  := <16001   >; @[: 42007]
+  17001. [  5:   44631]  := <17001   >; @[: 44632]
+  18001. [  5:   47256]  := <18001   >; @[: 47257]
+  19001. [  5:   49881]  := <19001   >; @[: 49882]
+  20001. [  5:   52506]  := <20001   >; @[: 52507]
+  21001. [  5:   55131]  := <21001   >; @[: 55132]
+  22001. [  5:   57756]  := <22001   >; @[: 57757]
+  23001. [  5:   60381]  := <23001   >; @[: 60382]
+  24001. [  5:   63006]  := <24001   >; @[: 63007]
+  25001. [  5:   65631]  := <25001   >; @[: 65632]
+  26001. [  5:   68256]  := <26001   >; @[: 68257]
+  27001. [  5:   70881]  := <27001   >; @[: 70882]
+  28001. [  5:   73506]  := <28001   >; @[: 73507]
+  29001. [  5:   76131]  := <29001   >; @[: 76132]
+  30001. [  5:   78756]  := <30001   >; @[:
